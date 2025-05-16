@@ -1,9 +1,11 @@
-Line no 2: Token <STRING> Lexeme "He said, \" I own a dog\"\
-    so I asked, \"What is his name?\"" found --> <STRING, He said, " I own a dog"	    so I asked, "What is his name?">
+Line no 6: Token <COMMENT> Lexeme /* A sample multi-line
+    comment
 
-Line no 2: Token <SEMICOLON> Lexeme ; found
+
+    
+    to check. */ found
 
 ScopeTable # 1
 
-Total lines: 2
+Total lines: 6
 Total errors: 0

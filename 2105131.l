@@ -23,11 +23,7 @@ DIGIT [0-9]
     cout << " Line Count: " << yylineno << endl;
     /*fprintf(logfile, "Line no %d: \n", yylineno);*/
 }
-<MComment>\n {
-    yylineno++;
-    cout << " Line Count: " << yylineno << endl;
-    /*fprintf(logfile, "Line no %d: \n", yylineno);*/
-}
+
 
 #lexicalErrors
 {DIGIT}*\.{DIGIT}*\..*       { cout << "Line no: " << yylineno << " Error: this " << yytext << endl; error_count++; }
@@ -44,11 +40,12 @@ DIGIT [0-9]
 #Comments
 <INITIAL>\/\/              { BEGIN(SComment); curr+=yytext;}
 <SComment>\\\n             { yylineno++; curr+=yytext;}
-<SComment>\n                {   BEGIN(INITIAL); yylineno++; 
+<SComment>\n                {   BEGIN(INITIAL);  
                                 cout << " Line Count: " << yylineno << endl; 
-                                curr+='\n';
+                                //curr+='\n';
                                 fprintf(logfile, "Line no %d: Token <COMMENT> Lexeme %s found\n\n", yylineno,curr.c_str());
                                 curr="";
+                                yylineno++;
                             }
 <SComment>.                  { curr+=yytext; }
 
@@ -59,7 +56,12 @@ DIGIT [0-9]
                              fprintf(logfile, "Line no %d: Token <COMMENT> Lexeme %s found\n\n", yylineno,curr.c_str());
                              curr="";
                             }
-<MComment>.                 { curr+=yytext; }
+<MComment>\n {
+    yylineno++;
+    cout << " Line Count: " << yylineno << endl;
+    curr += '\n'; 
+}
+<MComment>.                 { curr+=yytext;}
 
 #Keywords
 if                { printf("<IF>");    fprintf(logfile, "Line no %d: Token <IF> Lexeme if found\n\n", yylineno); }

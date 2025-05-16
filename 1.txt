@@ -1,2 +1,6 @@
-"He said, \" I own a dog\"\
-    so I asked, \"What is his name?\"";
+    /* A sample multi-line
+    comment
+
+
+    
+    to check. */
