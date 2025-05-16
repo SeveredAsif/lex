@@ -1,0 +1,11 @@
+Line no 1: Token <CONST_FLOAT> Lexeme 1E7 found
+
+ScopeTable # 1
+4 --> < 1E7 : CONST_FLOAT >
+
+Line no 2: Token <CONST_FLOAT> Lexeme 1E7 found
+
+<1E7 : FLOAT> ScopeTable# 1 at position 4, 1
+
+Total lines: 2
+Total errors: 0

@@ -1,0 +1,149 @@
+15 may 
+1. 10:35-11:37 - 1 hr 1 min - character literals handled  - too slow - 1 hr for char literals
+2. 11:38 - 12:00 - 22 MIN - operators and punctuators - normal speed
+3. 12:01 - 1:13 - 1hr 12 min - identifier and insert them into symbol table include error etc - too much time
+4. 1:16 - 3:10 - in vain string manipulation 
+5. 3:44- 4:15 - string manipulation done 
+6. 4:21 - 5:22 - 1hr pause; 5:49 - 6:34 -1 hr 45 min  - multi line comment and comment done 
+7. 6:40-7:06 - whitespace and cmnt paused  7:11 - 8:50 - line count and white space single line comment fix - total 2 hr 5 min 
+8. 8:52 - 9:22 - pause lexical error 10:45-11:24 - lexical error a little bit more 1:24 am - 2:40 almost 
+9.2:40-4:18 am - main advanced 
+10. 9:36 am - 9:45 am paused 10:03 am-11:30 am - hash fix + output formatting going on
+11. 11:30 am - 
+<SComment>\/ {BEGIN (LockComment);}
+<LockComment>\n {BEGIN(SComment);linecount++;}
+
+
+3.14159
+3.14159E-10
+.314159
+000.0314
+#include <stdio.h>
+
+int main() {
+    // Variable declarations using different types
+    int a = 0;
+    float b = 1.0;
+    char c = 'x';
+    double d = 2.0;
+    long e = 3;
+    short f = 4;
+    unsigned g = 5;
+    static int h = 6;
+
+    // Control flow keywords
+    if (a == 0) {
+        printf("if ");
+    } else {
+        printf("else ");
+    }
+
+    for (int i = 0; i < 1; i++) {
+        printf("for ");
+    }
+
+    while (a < 1) {
+        printf("while ");
+        a++;
+    }
+
+    do {
+        printf("do ");
+    } while (a < 2);
+
+    switch (a) {
+        case 1:
+            printf("case ");
+            break;
+        default:
+            printf("default ");
+    }
+
+    // Jump statements
+    continue_label:
+    if (a == 2) {
+        printf("continue ");
+        goto goto_label;
+    }
+
+    if (a == 3) {
+        printf("break ");
+        break;
+    }
+
+    goto_label:
+    printf("goto ");
+
+    // Return statement
+    return 0;
+}
+
+this is '\a' variable 
+this is '\b' variable 
+this is '\c' variable
+this is '\' variable  
+this is '\n' variable  
+a + b 
+a - b 
+a * b 
+a / b 
+a % b 
+a++ 
+a-- 
+a < b 
+a <= b 
+a > b 
+a >= b 
+a == b 
+a != b 
+A = B 
+A && B 
+A || B 
+a ! b 
+A ( B + C ),
+A { B + C },
+A [ B + C ];
+
+int a;
+int a9;
+int _v19;
+INT 9A;
+/* comment */
+//Comment 1
+int x = 5; // Comment 2
+"This is a single line string"
+"This is a\nmultiline\nstring"
+//This is a comment
+//A multi line \
+commentt 
+/* liter*a"ls
+star/t 
+life */
+    
+
+    /* multi*line comment */
+
+    /* with * stars * but not terminator */
+//A multi line \
+comment 
+1.2.345.789
+"This is a\nmulti\\line\nstring"
+1.2
+1.2E-10
+1.2E+10.7
+1.2E-10.7
+1E5
+1E5.5
+1.1E5
+1.1E5.5
+12abcd
+'o'
+'abc'
+'a
+'\n 
+'\'
+"finished str\
+ing new"
+'k'
+'d
+
