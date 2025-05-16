@@ -84,7 +84,7 @@ class ScopeTable{
             //cout<<"yoo "<<bucketNumber<<endl;
             if(array[bucketNumber]==nullptr){
                 array[bucketNumber] = newSymbol;
-                cout<<"\tInserted in ScopeTable# "<<this->id<<" at position "<<bucketNumber<<", "<<chainPosition<<endl;
+                //cout<<"\tInserted in ScopeTable# "<<this->id<<" at position "<<bucketNumber<<", "<<chainPosition<<endl;
                 return true;
 
             }
@@ -93,7 +93,7 @@ class ScopeTable{
                 SymbolInfo* temp = array[bucketNumber];
                 if(temp->getName()==name){
                     delete newSymbol;
-                    cout<<"\t'"<<name<<"'"<<" already exists in the current ScopeTable"<<endl;
+                    //cout<<"\t'"<<name<<"'"<<" already exists in the current ScopeTable"<<endl;
                     return false;
                 }
                 while(temp->getNext()!=nullptr){
@@ -101,13 +101,13 @@ class ScopeTable{
                     chainPosition++;
                     if(temp->getName()==name){
                         delete newSymbol;
-                        cout<<"\t'"<<name<<"'"<<" already exists in the current ScopeTable"<<endl;
+                        //cout<<"\t'"<<name<<"'"<<" already exists in the current ScopeTable"<<endl;
                         return false;
                     }
                 }
                 temp->setNext(newSymbol);
                 chainPosition++;
-                cout<<"\tInserted in ScopeTable# "<<this->id<<" at position "<<bucketNumber<<", "<<chainPosition<<endl;
+                //cout<<"\tInserted in ScopeTable# "<<this->id<<" at position "<<bucketNumber<<", "<<chainPosition<<endl;
                 return true;
             }
         }
@@ -155,7 +155,7 @@ class ScopeTable{
                 array[bucket] = toDelete->getNext();
                 toDelete->setNext(nullptr);
                 delete toDelete;
-                cout<<"\tDeleted '"<<name<<"' from ScopeTable# "<<this->id<<" at position "<<bucket+1<<", "<<chainPosition<<endl;
+                //cout<<"\tDeleted '"<<name<<"' from ScopeTable# "<<this->id<<" at position "<<bucket+1<<", "<<chainPosition<<endl;
                 return true;
             }
             else{
@@ -166,7 +166,7 @@ class ScopeTable{
                         SymbolInfo* toDelete = temp->getNext();
                         temp->setNext(temp->getNext()->getNext());
                         delete toDelete;
-                        cout<<"\tDeleted '"<<name<<"' from ScopeTable# "<<this->id<<" at position"<<bucket+1<<", "<<chainPosition<<endl;
+                        //cout<<"\tDeleted '"<<name<<"' from ScopeTable# "<<this->id<<" at position"<<bucket+1<<", "<<chainPosition<<endl;
                         return true;
                     }
                     temp = temp->getNext();

@@ -13,7 +13,7 @@ class SymbolTable
         SymbolTable(int bucketCount=7,unsigned (*hashPointer)(const char *) = SDBMHash){
             // ScopeTable.setScopeId(1);
             currentScope = new ScopeTable(bucketCount,nullptr,hashPointer);
-            cout<<"\tScopeTable# "<<getCurrentScope()->getId()<<" created"<<endl;
+            //cout<<"\tScopeTable# "<<getCurrentScope()->getId()<<" created"<<endl;
             this->bucketCount = bucketCount;
         }
         // ~SymbolTable(){
@@ -26,7 +26,7 @@ class SymbolTable
         ~SymbolTable() noexcept {
             while (currentScope) {
                 ScopeTable* parent = currentScope->getParent();
-                cout<<"\tScopeTable# "<<currentScope->getId()<<" removed"<<endl;
+                //cout<<"\tScopeTable# "<<currentScope->getId()<<" removed"<<endl;
                 delete currentScope;       
                 currentScope = parent;     
             }
@@ -37,13 +37,13 @@ class SymbolTable
         void enterScope(){
             ScopeTable *newScope = new ScopeTable(bucketCount,currentScope);
             this->currentScope = newScope;
-            cout<<"\tScopeTable# "<<getCurrentScope()->getId()<<" created"<<endl;
+            //cout<<"\tScopeTable# "<<getCurrentScope()->getId()<<" created"<<endl;
         }
 
         void exitScope(){
             ScopeTable *toExit = currentScope;
             if(currentScope->getParent()!=nullptr){ //preventing global scope to get deleted
-                cout<<"\tScopeTable# "<<currentScope->getId()<<" removed"<<endl;
+                //cout<<"\tScopeTable# "<<currentScope->getId()<<" removed"<<endl;
                 this->currentScope = currentScope->getParent();
                 delete toExit;
             }
@@ -67,7 +67,7 @@ class SymbolTable
                 }
                 temp = temp->getParent();
             }
-            cout<<"\t'"<<name<<"' not found in any of the ScopeTables"<<endl;
+            //cout<<"\t'"<<name<<"' not found in any of the ScopeTables"<<endl;
             return "";
         }
 

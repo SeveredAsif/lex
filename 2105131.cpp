@@ -951,7 +951,7 @@ YY_RULE_SETUP
 #line 24 "2105131.l"
 {
     yylineno++;
-    cout << " Line Count: " << yylineno << endl;
+    //cout << " Line Count: " << yylineno << endl;
     /*fprintf(logfile, "Line no %d: \n", yylineno);*/
 }
 	YY_BREAK
@@ -980,7 +980,7 @@ case 6:
 YY_RULE_SETUP
 #line 42 "2105131.l"
 {
-    cout<<yytext<<" error char"<<endl;
+    //cout<<yytext<<" error char"<<endl;
     fprintf(logfile, "Error at line no %d: Multi character constant error %s\n\n\n", yylineno, yytext);
     error_count++;
 }
@@ -1069,7 +1069,7 @@ case 15:
 YY_RULE_SETUP
 #line 94 "2105131.l"
 {   BEGIN(INITIAL);  
-                                cout << " Line Count: " << yylineno << endl; 
+                                //cout << " Line Count: " << yylineno << endl; 
                                 //curr+='\n';
                                 fprintf(logfile, "Line no %d: Token <COMMENT> Lexeme %s found\n\n", yylineno,curr.c_str());
                                 curr="";
@@ -1111,7 +1111,7 @@ YY_RULE_SETUP
 #line 115 "2105131.l"
 {
     yylineno++;
-    cout << " Line Count: " << yylineno << endl;
+    //cout << " Line Count: " << yylineno << endl;
     curr += '\n'; 
     currComment += '\n';
 }
@@ -1129,107 +1129,107 @@ YY_RULE_SETUP
 case 23:
 YY_RULE_SETUP
 #line 124 "2105131.l"
-{ printf("<IF>");    fprintf(logfile, "Line no %d: Token <IF> Lexeme if found\n\n", yylineno); }
+{ printf("<IF> ");    fprintf(logfile, "Line no %d: Token <IF> Lexeme if found\n\n", yylineno); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 125 "2105131.l"
-{ printf("<FOR>");   fprintf(logfile, "Line no %d: Token <FOR> Lexeme for found\n\n", yylineno); }
+{ printf("<FOR> ");   fprintf(logfile, "Line no %d: Token <FOR> Lexeme for found\n\n", yylineno); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 126 "2105131.l"
-{ printf("<DO>");    fprintf(logfile, "Line no %d: Token <DO> Lexeme do found\n\n", yylineno); }
+{ printf("<DO> ");    fprintf(logfile, "Line no %d: Token <DO> Lexeme do found\n\n", yylineno); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 127 "2105131.l"
-{ printf("<INT>");   fprintf(logfile, "Line no %d: Token <INT> Lexeme int found\n\n", yylineno); }
+{ printf("<INT> ");   fprintf(logfile, "Line no %d: Token <INT> Lexeme int found\n\n", yylineno); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 128 "2105131.l"
-{ printf("<FLOAT>"); fprintf(logfile, "Line no %d: Token <FLOAT> Lexeme float found\n\n", yylineno); }
+{ printf("<FLOAT> "); fprintf(logfile, "Line no %d: Token <FLOAT> Lexeme float found\n\n", yylineno); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 129 "2105131.l"
-{ printf("<VOID>");  fprintf(logfile, "Line no %d: Token <VOID> Lexeme void found\n\n", yylineno); }
+{ printf("<VOID> ");  fprintf(logfile, "Line no %d: Token <VOID> Lexeme void found\n\n", yylineno); }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 130 "2105131.l"
-{ printf("<SWITCH>");fprintf(logfile, "Line no %d: Token <SWITCH> Lexeme switch found\n\n", yylineno); }
+{ printf("<SWITCH> ");fprintf(logfile, "Line no %d: Token <SWITCH> Lexeme switch found\n\n", yylineno); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 131 "2105131.l"
-{ printf("<DEFAULT>");fprintf(logfile, "Line no %d: Token <DEFAULT> Lexeme default found\n\n", yylineno); }
+{ printf("<DEFAULT> ");fprintf(logfile, "Line no %d: Token <DEFAULT> Lexeme default found\n\n", yylineno); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 132 "2105131.l"
-{ printf("<ELSE>");  fprintf(logfile, "Line no %d: Token <ELSE> Lexeme else found\n\n", yylineno); }
+{ printf("<ELSE> ");  fprintf(logfile, "Line no %d: Token <ELSE> Lexeme else found\n\n", yylineno); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 133 "2105131.l"
-{ printf("<WHILE>"); fprintf(logfile, "Line no %d: Token <WHILE> Lexeme while found\n\n", yylineno); }
+{ printf("<WHILE> "); fprintf(logfile, "Line no %d: Token <WHILE> Lexeme while found\n\n", yylineno); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 134 "2105131.l"
-{ printf("<BREAK>");fprintf(logfile, "Line no %d: Token <BREAK> Lexeme break found\n\n", yylineno); }
+{ printf("<BREAK> ");fprintf(logfile, "Line no %d: Token <BREAK> Lexeme break found\n\n", yylineno); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 135 "2105131.l"
-{ printf("<CHAR>");  fprintf(logfile, "Line no %d: Token <CHAR> Lexeme char found\n\n", yylineno); }
+{ printf("<CHAR> ");  fprintf(logfile, "Line no %d: Token <CHAR> Lexeme char found\n\n", yylineno); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 136 "2105131.l"
-{ printf("<DOUBLE>");fprintf(logfile, "Line no %d: Token <DOUBLE> Lexeme double found\n\n", yylineno); }
+{ printf("<DOUBLE> ");fprintf(logfile, "Line no %d: Token <DOUBLE> Lexeme double found\n\n", yylineno); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 137 "2105131.l"
-{ printf("<RETURN>");fprintf(logfile, "Line no %d: Token <RETURN> Lexeme return found\n\n", yylineno); }
+{ printf("<RETURN> ");fprintf(logfile, "Line no %d: Token <RETURN> Lexeme return found\n\n", yylineno); }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 138 "2105131.l"
-{ printf("<CASE>");  fprintf(logfile, "Line no %d: Token <CASE> Lexeme case found\n\n", yylineno); }
+{ printf("<CASE> ");  fprintf(logfile, "Line no %d: Token <CASE> Lexeme case found\n\n", yylineno); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 139 "2105131.l"
-{ printf("<CONTINUE>");fprintf(logfile, "Line no %d: Token <CONTINUE> Lexeme continue found\n\n", yylineno); }
+{ printf("<CONTINUE> ");fprintf(logfile, "Line no %d: Token <CONTINUE> Lexeme continue found\n\n", yylineno); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 140 "2105131.l"
-{ printf("<GOTO>");  fprintf(logfile, "Line no %d: Token <GOTO> Lexeme goto found\n\n", yylineno); }
+{ printf("<GOTO> ");  fprintf(logfile, "Line no %d: Token <GOTO> Lexeme goto found\n\n", yylineno); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 141 "2105131.l"
-{ printf("<LONG>");  fprintf(logfile, "Line no %d: Token <LONG> Lexeme long found\n\n", yylineno); }
+{ printf("<LONG> ");  fprintf(logfile, "Line no %d: Token <LONG> Lexeme long found\n\n", yylineno); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 142 "2105131.l"
-{ printf("<SHORT>"); fprintf(logfile, "Line no %d: Token <SHORT> Lexeme short found\n\n", yylineno); }
+{ printf("<SHORT> "); fprintf(logfile, "Line no %d: Token <SHORT> Lexeme short found\n\n", yylineno); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 143 "2105131.l"
-{ printf("<STATIC>");fprintf(logfile, "Line no %d: Token <STATIC> Lexeme static found\n\n", yylineno); }
+{ printf("<STATIC> ");fprintf(logfile, "Line no %d: Token <STATIC> Lexeme static found\n\n", yylineno); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 144 "2105131.l"
-{ printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UNSIGNED> Lexeme unsigned found\n\n", yylineno); }
+{ printf("<UNSIGNED> ");fprintf(logfile, "Line no %d: Token <UNSIGNED> Lexeme unsigned found\n\n", yylineno); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
@@ -1240,7 +1240,7 @@ case 45:
 YY_RULE_SETUP
 #line 147 "2105131.l"
 { if(st->getCurrentScope()->getId()>1){
-                                printf("<CONST_INT,%s>", yytext);   
+                                printf("<CONST_INT, %s> ", yytext);   
                                 fprintf(logfile, "Line no %d: Token <CONST_INT> Lexeme %s found\n\n", yylineno, yytext); 
                                 stringstream ss;
                                 ss << "<CONST_INT," << yytext << ">";
@@ -1261,7 +1261,7 @@ YY_RULE_SETUP
 { 
     if(st->getCurrentScope()->getId()>1){
 
-    printf("<CONST_FLOAT,%s>", yytext); 
+    printf("<CONST_FLOAT, %s> ", yytext); 
     fprintf(logfile, "Line no %d: Token <CONST_FLOAT> Lexeme %s found\n\n", yylineno, yytext); 
     stringstream ss;
     ss << "<CONST_FLOAT," << yytext << ">";
@@ -1293,8 +1293,8 @@ case 49:
 YY_RULE_SETUP
 #line 189 "2105131.l"
 {   
-                                if(st->getCurrentScope()->getId()>1)
-                                printf("<CONST_CHAR,%c>", yytext[2]); 
+                                //if(st->getCurrentScope()->getId()>1)
+                                
                                 char value;
 
                                 if (yytext[2] == 'a') value = '\a';
@@ -1307,7 +1307,8 @@ YY_RULE_SETUP
                                 else value = yytext[2]; // not an escape character
 
                                 fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '\\%c' found --> <CONST_CHAR, %c>\n\n", 
-                                yylineno, yytext[2], value);  
+                                yylineno, yytext[2], value); 
+                                printf("<CONST_CHAR, %c> ", value);  
                                 stringstream ss;
                                 ss << "<CONST_CHAR," << yytext << ">";
                                 string printStr = ss.str();
@@ -1323,10 +1324,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 217 "2105131.l"
+#line 218 "2105131.l"
 {   
                                 if(st->getCurrentScope()->getId()>1){
-                                printf("<CONST_CHAR,%c>", yytext[2]); 
+                                printf("<CONST_CHAR, %c> ", yytext[1]); 
                                 fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '%c' found --> <CONST_CHAR, %c>\n\n", yylineno, yytext[1],yytext[1]); 
                                 stringstream ss;
                                 ss << "<CONST_CHAR," << yytext << ">";
@@ -1344,10 +1345,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 234 "2105131.l"
+#line 235 "2105131.l"
 { 
                                 if(st->getCurrentScope()->getId()>1){
-                                printf("<CONST_CHAR,%c>", '\n'); fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '\\n' found --> <CONST_CHAR, %c>\n\n", yylineno,'\n'); 
+                                printf("<CONST_CHAR, %c> ", '\n'); fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '\\n' found --> <CONST_CHAR, %c>\n\n", yylineno,'\n'); 
                                 stringstream ss;
                                 ss << "<CONST_CHAR," << "'\n'" << ">";
                                 string printStr = ss.str();
@@ -1365,7 +1366,7 @@ YY_RULE_SETUP
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 250 "2105131.l"
+#line 251 "2105131.l"
 {
     fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
@@ -1373,7 +1374,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 254 "2105131.l"
+#line 255 "2105131.l"
 {
     fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
@@ -1381,96 +1382,96 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 261 "2105131.l"
+#line 262 "2105131.l"
 
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 262 "2105131.l"
-{ printf("<ADDOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <ADDOP> Lexeme %s found\n\n", yylineno, yytext); }
+#line 263 "2105131.l"
+{ printf("<ADDOP, %s> ", yytext); fprintf(logfile, "Line no %d: Token <ADDOP> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 263 "2105131.l"
-{ printf("<MULOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <MULOP> Lexeme %s found\n\n", yylineno, yytext); }
+#line 264 "2105131.l"
+{ printf("<MULOP, %s> ", yytext); fprintf(logfile, "Line no %d: Token <MULOP> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 264 "2105131.l"
-{ printf("<INCOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <INCOP> Lexeme %s found\n\n", yylineno, yytext); }
+#line 265 "2105131.l"
+{ printf("<INCOP, %s> ", yytext); fprintf(logfile, "Line no %d: Token <INCOP> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 265 "2105131.l"
-{ printf("<RELOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <RELOP> Lexeme %s found\n\n", yylineno, yytext); }
+#line 266 "2105131.l"
+{ printf("<RELOP, %s> ", yytext); fprintf(logfile, "Line no %d: Token <RELOP> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 266 "2105131.l"
-{ printf("<ASSIGNOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <ASSIGNOP> Lexeme %s found\n\n", yylineno, yytext); }
+#line 267 "2105131.l"
+{ printf("<ASSIGNOP, %s> ", yytext); fprintf(logfile, "Line no %d: Token <ASSIGNOP> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 267 "2105131.l"
-{ printf("<LOGICOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <LOGICOP> Lexeme %s found\n\n", yylineno, yytext); }
+#line 268 "2105131.l"
+{ printf("<LOGICOP, %s> ", yytext); fprintf(logfile, "Line no %d: Token <LOGICOP> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 268 "2105131.l"
-{ printf("<NOT,%s>", yytext); fprintf(logfile, "Line no %d: Token <NOT> Lexeme %s found\n\n", yylineno, yytext); }
+#line 269 "2105131.l"
+{ printf("<NOT, %s> ", yytext); fprintf(logfile, "Line no %d: Token <NOT> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 269 "2105131.l"
-{ printf("<LPAREN,%s>", yytext); fprintf(logfile, "Line no %d: Token <LPAREN> Lexeme %s found\n\n", yylineno, yytext); }
+#line 270 "2105131.l"
+{ printf("<LPAREN, %s> ", yytext); fprintf(logfile, "Line no %d: Token <LPAREN> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 270 "2105131.l"
-{ printf("<RPAREN,%s>", yytext); fprintf(logfile, "Line no %d: Token <RPAREN> Lexeme %s found\n\n", yylineno, yytext); }
+#line 271 "2105131.l"
+{ printf("<RPAREN, %s> ", yytext); fprintf(logfile, "Line no %d: Token <RPAREN> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 271 "2105131.l"
-{ printf("<LCURL,%s>", yytext); fprintf(logfile, "Line no %d: Token <LCURL> Lexeme %s found\n\n", yylineno, yytext); st->enterScope();}
+#line 272 "2105131.l"
+{ printf("<LCURL, %s> ", yytext); fprintf(logfile, "Line no %d: Token <LCURL> Lexeme %s found\n\n", yylineno, yytext); st->enterScope();}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 272 "2105131.l"
-{ printf("<RCURL,%s>", yytext); fprintf(logfile, "Line no %d: Token <RCURL> Lexeme %s found\n\n", yylineno, yytext); st->exitScope();}
+#line 273 "2105131.l"
+{ printf("<RCURL, %s> ", yytext); fprintf(logfile, "Line no %d: Token <RCURL> Lexeme %s found\n\n", yylineno, yytext); st->exitScope();}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 273 "2105131.l"
-{ printf("<LTHIRD,%s>", yytext); fprintf(logfile, "Line no %d: Token <LTHIRD> Lexeme %s found\n\n", yylineno, yytext); }
+#line 274 "2105131.l"
+{ printf("<LTHIRD, %s> ", yytext); fprintf(logfile, "Line no %d: Token <LTHIRD> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 274 "2105131.l"
-{ printf("<RTHIRD,%s>", yytext); fprintf(logfile, "Line no %d: Token <RTHIRD> Lexeme %s found\n\n", yylineno, yytext); }
+#line 275 "2105131.l"
+{ printf("<RTHIRD, %s> ", yytext); fprintf(logfile, "Line no %d: Token <RTHIRD> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 275 "2105131.l"
-{ printf("<COMMA,%s>", yytext); fprintf(logfile, "Line no %d: Token <COMMA> Lexeme %s found\n\n", yylineno, yytext); }
+#line 276 "2105131.l"
+{ printf("<COMMA, %s> ", yytext); fprintf(logfile, "Line no %d: Token <COMMA> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 276 "2105131.l"
-{ printf("<SEMICOLON,%s>", yytext); fprintf(logfile, "Line no %d: Token <SEMICOLON> Lexeme %s found\n\n", yylineno, yytext); }
+#line 277 "2105131.l"
+{ printf("<SEMICOLON, %s> ", yytext); fprintf(logfile, "Line no %d: Token <SEMICOLON> Lexeme %s found\n\n", yylineno, yytext); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 280 "2105131.l"
+#line 281 "2105131.l"
 
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 281 "2105131.l"
+#line 282 "2105131.l"
 {
-    cout<<yytext<<" valid id"<<endl;
+    //cout<<yytext<<" valid id"<<endl;
     //if(st->getCurrentScope()->getId()>1)
-    printf("<ID,%s>", yytext);
+    printf("<ID, %s> ", yytext);
     fprintf(logfile, "Line no %d: Token <ID> Lexeme %s found\n\n", yylineno, yytext);
     stringstream ss;
     ss << "<ID," << yytext << ">";
@@ -1486,7 +1487,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 299 "2105131.l"
+#line 300 "2105131.l"
 {
     BEGIN(String);
     curr = "<STRING, ";
@@ -1495,7 +1496,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 306 "2105131.l"
+#line 307 "2105131.l"
 {
     flag=0;
     curr += yytext;
@@ -1504,7 +1505,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 313 "2105131.l"
+#line 314 "2105131.l"
 {
     flag=0;
     curr += "\"";
@@ -1513,7 +1514,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 320 "2105131.l"
+#line 321 "2105131.l"
 {
     flag=0;
     curr += "\\";
@@ -1523,7 +1524,7 @@ YY_RULE_SETUP
 case 76:
 /* rule 76 can match eol */
 YY_RULE_SETUP
-#line 326 "2105131.l"
+#line 327 "2105131.l"
 {
     if(startError==-1){
         startError = yylineno;
@@ -1539,7 +1540,7 @@ YY_RULE_SETUP
 case 77:
 /* rule 77 can match eol */
 YY_RULE_SETUP
-#line 340 "2105131.l"
+#line 341 "2105131.l"
 {
     if (startError==-1) startError=yylineno;
     fprintf(logfile, "Error at line no %d: Unterminated string %s\n\n", startError, lexemecurr.c_str());
@@ -1552,7 +1553,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 351 "2105131.l"
+#line 352 "2105131.l"
 {
     if(flag==1){
     fprintf(logfile, "Error at line no %d: Unterminated string %s\n\n", startError, lexemecurr.c_str());
@@ -1566,6 +1567,7 @@ YY_RULE_SETUP
     curr += ">";
     lexemecurr += "\"";
     fprintf(logfile, "Line no %d: Token <STRING> Lexeme %s found --> %s\n\n", yylineno, lexemecurr.c_str(), curr.c_str());
+    printf("%s ",curr.c_str());
     startError=-1;
     curr = "";
     lexemecurr = "";
@@ -1575,7 +1577,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SComment):
-#line 372 "2105131.l"
+#line 374 "2105131.l"
 {
     if (logfile) {
         fprintf(logfile, "%s", st->printAllScope().c_str());
@@ -1587,10 +1589,10 @@ case YY_STATE_EOF(SComment):
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 380 "2105131.l"
+#line 382 "2105131.l"
 ECHO;
 	YY_BREAK
-#line 1594 "2105131.cpp"
+#line 1596 "2105131.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2593,11 +2595,13 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 380 "2105131.l"
+#line 382 "2105131.l"
 
 
 int main(int argc, char* argv[])
 {
+    freopen("output.txt", "w", stdout);
+
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
         return 1;
