@@ -7,73 +7,86 @@
     #include <cstdio>
     using namespace std;
     SymbolTable* st;
-    int linecount = 1;
+    string lexemecurr = "";
     string curr = "";
     FILE* logfile = nullptr;
     int error_count = 0;
 %}
 
 DIGIT [0-9]
-%s MComment
-%x SComment String
+%x SComment String MComment
 %%
 
-#linecount
+#yylineno
 \n {
-    linecount++;
-    cout << " Line Count: " << linecount << endl;
-    /*fprintf(logfile, "Line no %d: \n", linecount);*/
+    yylineno++;
+    cout << " Line Count: " << yylineno << endl;
+    /*fprintf(logfile, "Line no %d: \n", yylineno);*/
+}
+<MComment>\n {
+    yylineno++;
+    cout << " Line Count: " << yylineno << endl;
+    /*fprintf(logfile, "Line no %d: \n", yylineno);*/
 }
 
 #lexicalErrors
-{DIGIT}*\.{DIGIT}*\..*       { cout << "Line no: " << linecount << " Error: this " << yytext << endl; error_count++; }
+{DIGIT}*\.{DIGIT}*\..*       { cout << "Line no: " << yylineno << " Error: this " << yytext << endl; error_count++; }
 
-{DIGIT}+[A-Za-z_]+        { cout << "Line no: " << linecount << " Error: that" << yytext << endl; error_count++; }
-'[[:alnum:]][[:alnum:]]+'      { cout << "Line no: " << linecount << " Error: wow" << yytext << endl; error_count++; }
-<String><<EOF>>             { cout << "STRING Line no: " << linecount << " Error: ajaira" << yytext << endl; error_count++; exit(1); }
-<MComment><<EOF>>            { cout << "Line no: " << linecount << " Error: chole" << yytext << endl; error_count++; exit(1); }
-''                           { cout << "Line no: " << linecount << " Error: bored" << yytext << endl; exit(1); }
+{DIGIT}+[A-Za-z_]+        { cout << "Line no: " << yylineno << " Error: that" << yytext << endl; error_count++; }
+'[[:alnum:]][[:alnum:]]+'      { cout << "Line no: " << yylineno << " Error: wow" << yytext << endl; error_count++; }
+<String><<EOF>>             { cout << "STRING Line no: " << yylineno << " Error: ajaira" << yytext << endl; error_count++; exit(1); }
+<MComment><<EOF>>            { cout << "Line no: " << yylineno << " Error: chole" << yytext << endl; error_count++; exit(1); }
+''                           { cout << "Line no: " << yylineno << " Error: bored" << yytext << endl; exit(1); }
 
 #whitespace
 [ \t\r\f\v]+               { /* skip */ }
 
 #Comments
-<INITIAL>\/\/              { BEGIN(SComment); }
-<SComment>\\\n             { linecount++; }
-<SComment>\n                { BEGIN(INITIAL); linecount++; cout << " Line Count: " << linecount << endl; }
-<SComment>.                  { /* skip */ }
+<INITIAL>\/\/              { BEGIN(SComment); curr+=yytext;}
+<SComment>\\\n             { yylineno++; curr+=yytext;}
+<SComment>\n                {   BEGIN(INITIAL); yylineno++; 
+                                cout << " Line Count: " << yylineno << endl; 
+                                curr+='\n';
+                                fprintf(logfile, "Line no %d: Token <COMMENT> Lexeme %s found\n\n", yylineno,curr.c_str());
+                                curr="";
+                            }
+<SComment>.                  { curr+=yytext; }
 
 #MultilineComment
-<INITIAL>"/*"             { BEGIN(MComment); }
-<MComment>"*/"             { BEGIN(INITIAL); }
-<MComment>.                 { /* skip */ }
+<INITIAL>"/*"             { BEGIN(MComment); curr+=yytext;}
+<MComment>"*/"             { BEGIN(INITIAL); 
+                             curr+=yytext;
+                             fprintf(logfile, "Line no %d: Token <COMMENT> Lexeme %s found\n\n", yylineno,curr.c_str());
+                             curr="";
+                            }
+<MComment>.                 { curr+=yytext; }
 
 #Keywords
-if                { printf("<IF>");    fprintf(logfile, "Line no %d: Token <IF> Lexeme if found\n\n", linecount); }
-for               { printf("<FOR>");   fprintf(logfile, "Line no %d: Token <FOR> Lexeme for found\n\n", linecount); }
-do                { printf("<DO>");    fprintf(logfile, "Line no %d: Token <DO> Lexeme do found\n\n", linecount); }
-int               { printf("<INT>");   fprintf(logfile, "Line no %d: Token <INT> Lexeme int found\n\n", linecount); }
-float             { printf("<FLOAT>"); fprintf(logfile, "Line no %d: Token <FLOAT> Lexeme float found\n\n", linecount); }
-void              { printf("<VOID>");  fprintf(logfile, "Line no %d: Token <VOID> Lexeme void found\n\n", linecount); }
-switch           { printf("<SWITCH>");fprintf(logfile, "Line no %d: Token <SWITCH> Lexeme switch found\n\n", linecount); }
-default           { printf("<DEFAULT>");fprintf(logfile, "Line no %d: Token <DEFAULT> Lexeme default found\n\n", linecount); }
-else              { printf("<ELSE>");  fprintf(logfile, "Line no %d: Token <ELSE> Lexeme else found\n\n", linecount); }
-while             { printf("<WHILE>"); fprintf(logfile, "Line no %d: Token <WHILE> Lexeme while found\n\n", linecount); }
-break             { printf("<BREAK>");fprintf(logfile, "Line no %d: Token <BREAK> Lexeme break found\n\n", linecount); }
-char              { printf("<CHAR>");  fprintf(logfile, "Line no %d: Token <CHAR> Lexeme char found\n\n", linecount); }
-double            { printf("<DOUBLE>");fprintf(logfile, "Line no %d: Token <DOUBLE> Lexeme double found\n\n", linecount); }
-return           { printf("<RETURN>");fprintf(logfile, "Line no %d: Token <RETURN> Lexeme return found\n\n", linecount); }
-case              { printf("<CASE>");  fprintf(logfile, "Line no %d: Token <CASE> Lexeme case found\n\n", linecount); }
-continue         { printf("<CONTINUE>");fprintf(logfile, "Line no %d: Token <CONTINUE> Lexeme continue found\n\n", linecount); }
-goto              { printf("<GOTO>");  fprintf(logfile, "Line no %d: Token <GOTO> Lexeme goto found\n\n", linecount); }
-long             { printf("<LONG>");  fprintf(logfile, "Line no %d: Token <LONG> Lexeme long found\n\n", linecount); }
-short             { printf("<SHORT>"); fprintf(logfile, "Line no %d: Token <SHORT> Lexeme short found\n\n", linecount); }
-static            { printf("<STATIC>");fprintf(logfile, "Line no %d: Token <STATIC> Lexeme static found\n\n", linecount); }
-unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UNSIGNED> Lexeme unsigned found\n\n", linecount); }
+if                { printf("<IF>");    fprintf(logfile, "Line no %d: Token <IF> Lexeme if found\n\n", yylineno); }
+for               { printf("<FOR>");   fprintf(logfile, "Line no %d: Token <FOR> Lexeme for found\n\n", yylineno); }
+do                { printf("<DO>");    fprintf(logfile, "Line no %d: Token <DO> Lexeme do found\n\n", yylineno); }
+int               { printf("<INT>");   fprintf(logfile, "Line no %d: Token <INT> Lexeme int found\n\n", yylineno); }
+float             { printf("<FLOAT>"); fprintf(logfile, "Line no %d: Token <FLOAT> Lexeme float found\n\n", yylineno); }
+void              { printf("<VOID>");  fprintf(logfile, "Line no %d: Token <VOID> Lexeme void found\n\n", yylineno); }
+switch           { printf("<SWITCH>");fprintf(logfile, "Line no %d: Token <SWITCH> Lexeme switch found\n\n", yylineno); }
+default           { printf("<DEFAULT>");fprintf(logfile, "Line no %d: Token <DEFAULT> Lexeme default found\n\n", yylineno); }
+else              { printf("<ELSE>");  fprintf(logfile, "Line no %d: Token <ELSE> Lexeme else found\n\n", yylineno); }
+while             { printf("<WHILE>"); fprintf(logfile, "Line no %d: Token <WHILE> Lexeme while found\n\n", yylineno); }
+break             { printf("<BREAK>");fprintf(logfile, "Line no %d: Token <BREAK> Lexeme break found\n\n", yylineno); }
+char              { printf("<CHAR>");  fprintf(logfile, "Line no %d: Token <CHAR> Lexeme char found\n\n", yylineno); }
+double            { printf("<DOUBLE>");fprintf(logfile, "Line no %d: Token <DOUBLE> Lexeme double found\n\n", yylineno); }
+return           { printf("<RETURN>");fprintf(logfile, "Line no %d: Token <RETURN> Lexeme return found\n\n", yylineno); }
+case              { printf("<CASE>");  fprintf(logfile, "Line no %d: Token <CASE> Lexeme case found\n\n", yylineno); }
+continue         { printf("<CONTINUE>");fprintf(logfile, "Line no %d: Token <CONTINUE> Lexeme continue found\n\n", yylineno); }
+goto              { printf("<GOTO>");  fprintf(logfile, "Line no %d: Token <GOTO> Lexeme goto found\n\n", yylineno); }
+long             { printf("<LONG>");  fprintf(logfile, "Line no %d: Token <LONG> Lexeme long found\n\n", yylineno); }
+short             { printf("<SHORT>"); fprintf(logfile, "Line no %d: Token <SHORT> Lexeme short found\n\n", yylineno); }
+static            { printf("<STATIC>");fprintf(logfile, "Line no %d: Token <STATIC> Lexeme static found\n\n", yylineno); }
+unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UNSIGNED> Lexeme unsigned found\n\n", yylineno); }
 
 #Constants
 {DIGIT}+                      { printf("<CONST_INT,%s>", yytext);   
-                                fprintf(logfile, "Line no %d: Token <CONST_INT> Lexeme %s found\n\n", linecount, yytext); 
+                                fprintf(logfile, "Line no %d: Token <CONST_INT> Lexeme %s found\n\n", yylineno, yytext); 
                                 stringstream ss;
                                 ss << "<CONST_INT," << yytext << ">";
                                 string printStr = ss.str();
@@ -90,7 +103,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 
 [0-9]*\.?[0-9]+(E[+-]?{DIGIT}+)? { 
     printf("<CONST_FLOAT,%s>", yytext); 
-    fprintf(logfile, "Line no %d: Token <CONST_FLOAT> Lexeme %s found\n\n", linecount, yytext); 
+    fprintf(logfile, "Line no %d: Token <CONST_FLOAT> Lexeme %s found\n\n", yylineno, yytext); 
     stringstream ss;
     ss << "<CONST_FLOAT," << yytext << ">";
     string printStr = ss.str();
@@ -104,7 +117,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 }
 
 [0-9]*\.[0-9]+(E[+-]?{DIGIT}+.*\..*) { 
-    cout << "Line no: " << linecount << " Error: " << yytext << endl; 
+    cout << "Line no: " << yylineno << " Error: " << yytext << endl; 
     error_count++; 
 }
 
@@ -125,7 +138,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
                                 else value = yytext[2]; // not an escape character
 
                                 fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '\\%c' found --> <CONST_CHAR, %c>\n\n", 
-                                linecount, yytext[2], value);  
+                                yylineno, yytext[2], value);  
                                 stringstream ss;
                                 ss << "<CONST_CHAR," << yytext << ">";
                                 string printStr = ss.str();
@@ -140,7 +153,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
                             }
 '([^nt\\abfrbv0])'        {   
                                 printf("<CONST_CHAR,%c>", yytext[2]); 
-                                fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '%c' found --> <CONST_CHAR, %c>\n\n", linecount, yytext[1],yytext[1]); 
+                                fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '%c' found --> <CONST_CHAR, %c>\n\n", yylineno, yytext[1],yytext[1]); 
                                 stringstream ss;
                                 ss << "<CONST_CHAR," << yytext << ">";
                                 string printStr = ss.str();
@@ -154,7 +167,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
                                 
                             }
 '\\n'                         { 
-                                printf("<CONST_CHAR,%c>", '\n'); fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '\\n' found --> <CONST_CHAR, %c>\n\n", linecount,'\n'); 
+                                printf("<CONST_CHAR,%c>", '\n'); fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '\\n' found --> <CONST_CHAR, %c>\n\n", yylineno,'\n'); 
                                 stringstream ss;
                                 ss << "<CONST_CHAR," << "'\n'" << ">";
                                 string printStr = ss.str();
@@ -166,32 +179,32 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 
                                 }
                                 }
-"'"[^']{2}                   { cout << "Line no: " << linecount << " unmatched single quote Error: kire" << yytext << endl; error_count++; }
+"'"[^']{2}                   { cout << "Line no: " << yylineno << " unmatched single quote Error: kire" << yytext << endl; error_count++; }
 '\\'                        { /* lone backslash */ }
 
 #Operators
-[+-]                          { printf("<ADDOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <ADDOP> Lexeme %s found\n\n", linecount, yytext); }
-[*%//]                        { printf("<MULOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <MULOP> Lexeme %s found\n\n", linecount, yytext); }
-"++"|"--"                   { printf("<INCOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <INCOP> Lexeme %s found\n\n", linecount, yytext); }
-"<"|"<="|">"|">="|"=="|"!="    { printf("<RELOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <RELOP> Lexeme %s found\n\n", linecount, yytext); }
-=                             { printf("<ASSIGNOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <ASSIGNOP> Lexeme %s found\n\n", linecount, yytext); }
-"&&"|"||"                   { printf("<LOGICOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <LOGICOP> Lexeme %s found\n\n", linecount, yytext); }
-!                             { printf("<NOT,%s>", yytext); fprintf(logfile, "Line no %d: Token <NOT> Lexeme %s found\n\n", linecount, yytext); }
-\(                            { printf("<LPAREN,%s>", yytext); fprintf(logfile, "Line no %d: Token <LPAREN> Lexeme %s found\n\n", linecount, yytext); }
-\)                            { printf("<RPAREN,%s>", yytext); fprintf(logfile, "Line no %d: Token <RPAREN> Lexeme %s found\n\n", linecount, yytext); }
-\{                            { printf("<LCURL,%s>", yytext); fprintf(logfile, "Line no %d: Token <LCURL> Lexeme %s found\n\n", linecount, yytext); st->enterScope();}
-\}                            { printf("<RCURL,%s>", yytext); fprintf(logfile, "Line no %d: Token <RCURL> Lexeme %s found\n\n", linecount, yytext); st->exitScope();}
-\[                            { printf("<LTHIRD,%s>", yytext); fprintf(logfile, "Line no %d: Token <LTHIRD> Lexeme %s found\n\n", linecount, yytext); }
-\]                            { printf("<RTHIRD,%s>", yytext); fprintf(logfile, "Line no %d: Token <RTHIRD> Lexeme %s found\n\n", linecount, yytext); }
-,                             { printf("<COMMA,%s>", yytext); fprintf(logfile, "Line no %d: Token <COMMA> Lexeme %s found\n\n", linecount, yytext); }
-;                             { printf("<SEMICOLON,%s>", yytext); fprintf(logfile, "Line no %d: Token <SEMICOLON> Lexeme %s found\n\n", linecount, yytext); }
+[+-]                          { printf("<ADDOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <ADDOP> Lexeme %s found\n\n", yylineno, yytext); }
+[*%//]                        { printf("<MULOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <MULOP> Lexeme %s found\n\n", yylineno, yytext); }
+"++"|"--"                   { printf("<INCOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <INCOP> Lexeme %s found\n\n", yylineno, yytext); }
+"<"|"<="|">"|">="|"=="|"!="    { printf("<RELOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <RELOP> Lexeme %s found\n\n", yylineno, yytext); }
+=                             { printf("<ASSIGNOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <ASSIGNOP> Lexeme %s found\n\n", yylineno, yytext); }
+"&&"|"||"                   { printf("<LOGICOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <LOGICOP> Lexeme %s found\n\n", yylineno, yytext); }
+!                             { printf("<NOT,%s>", yytext); fprintf(logfile, "Line no %d: Token <NOT> Lexeme %s found\n\n", yylineno, yytext); }
+\(                            { printf("<LPAREN,%s>", yytext); fprintf(logfile, "Line no %d: Token <LPAREN> Lexeme %s found\n\n", yylineno, yytext); }
+\)                            { printf("<RPAREN,%s>", yytext); fprintf(logfile, "Line no %d: Token <RPAREN> Lexeme %s found\n\n", yylineno, yytext); }
+\{                            { printf("<LCURL,%s>", yytext); fprintf(logfile, "Line no %d: Token <LCURL> Lexeme %s found\n\n", yylineno, yytext); st->enterScope();}
+\}                            { printf("<RCURL,%s>", yytext); fprintf(logfile, "Line no %d: Token <RCURL> Lexeme %s found\n\n", yylineno, yytext); st->exitScope();}
+\[                            { printf("<LTHIRD,%s>", yytext); fprintf(logfile, "Line no %d: Token <LTHIRD> Lexeme %s found\n\n", yylineno, yytext); }
+\]                            { printf("<RTHIRD,%s>", yytext); fprintf(logfile, "Line no %d: Token <RTHIRD> Lexeme %s found\n\n", yylineno, yytext); }
+,                             { printf("<COMMA,%s>", yytext); fprintf(logfile, "Line no %d: Token <COMMA> Lexeme %s found\n\n", yylineno, yytext); }
+;                             { printf("<SEMICOLON,%s>", yytext); fprintf(logfile, "Line no %d: Token <SEMICOLON> Lexeme %s found\n\n", yylineno, yytext); }
 
 
 
 #Identifiers
 <INITIAL>[a-zA-Z_][a-zA-Z0-9_]* {
     printf("<ID,%s>", yytext);
-    fprintf(logfile, "Line no %d: Token <ID> Lexeme %s found\n\n", linecount, yytext);
+    fprintf(logfile, "Line no %d: Token <ID> Lexeme %s found\n\n", yylineno, yytext);
     stringstream ss;
     ss << "<ID," << yytext << ">";
     string printStr = ss.str();
@@ -205,23 +218,40 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 }
 
 #String
-<INITIAL>\"      { BEGIN(String); curr = "<STRING,\""; }
-<String>\\\n      { curr += "\\n"; }
-<String>\\n       { curr += "\n"; }
+<INITIAL>\"      { BEGIN(String);curr = "<STRING, "; lexemecurr ="\"" ; }
+<String>\\\n      { lexemecurr+="\\";lexemecurr += '\n'; curr+=""; yylineno++;}
+<String>\\n       { curr += "\n"; yylineno++;lexemecurr += "\n";}
 <String>\n        { cout << "string error" << endl; error_count++; BEGIN(INITIAL); }
-<String>\"        {
-    curr += "\">\n";
+<String>\"         {lexemecurr+=yytext;curr+="\"";}
+<String>.         { if(strcmp(yytext, "\\") != 0){
+                    curr += yytext; 
+                    //cout<<yytext<<endl;
+                    } 
+                    lexemecurr+=yytext;
+                    
+                   }
+<String>[^\\]\"        {
+    //curr += "\"";
+    curr += yytext[0];
+
+    curr += ">"; 
+    lexemecurr += yytext[0];
+    lexemecurr += "\""; 
+    string display_str = curr;
     BEGIN(INITIAL);
-    cout << curr;
-    fprintf(logfile, "Line no %d: Token %s", linecount, curr.c_str());
+    //string lexeme_content = display_str.substr(9, display_str.length()-10);
+    //fprintf(logfile, "Line no %d: Token <STRING> Lexeme \"%s\" found --> <STRING, %s>\n\n", yylineno, curr.c_str(),curr.c_str());
+        fprintf(logfile, "Line no %d: Token <STRING> Lexeme %s found --> %s\n\n", 
+            yylineno, lexemecurr.c_str(), curr.c_str());
     curr = "";
+    lexemecurr="";
 }
-<String>.         { curr += yytext; }
+
 
 <<EOF>> {
     if (logfile) {
         fprintf(logfile, "%s", st->printAllScope().c_str());
-        fprintf(logfile, "\nTotal lines: %d\n", linecount);
+        fprintf(logfile, "\nTotal lines: %d\n", yylineno);
         fprintf(logfile, "Total errors: %d\n", error_count);
     }
     return 0;
@@ -253,7 +283,7 @@ int main(int argc, char* argv[])
 
     yylex();
 
-    // fprintf(logfile, "\nTotal lines: %d\n", linecount);
+    // fprintf(logfile, "\nTotal lines: %d\n", yylineno);
     // fprintf(logfile, "Total errors: %d\n", error_count);
 
     fclose(yyin);

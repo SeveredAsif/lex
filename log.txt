@@ -9,9 +9,10 @@
 8. 8:52 - 9:22 - pause lexical error 10:45-11:24 - lexical error a little bit more 1:24 am - 2:40 almost 
 9.2:40-4:18 am - main advanced 
 10. 9:36 am - 9:45 am paused 10:03 am-11:30 am - hash fix + output formatting going on
-11. 11:30 am - 
+11. 11:30 am - 1:20 pm + input1 done 
+12. 2:02 pm - 2:26 - fixing input2 2:44-
 <SComment>\/ {BEGIN (LockComment);}
-<LockComment>\n {BEGIN(SComment);linecount++;}
+<LockComment>\n {BEGIN(SComment);yylineno++;}
 
 
 3.14159
