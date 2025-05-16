@@ -2600,7 +2600,7 @@ void yyfree (void * ptr )
 
 int main(int argc, char* argv[])
 {
-    freopen("output.txt", "w", stdout);
+    freopen("2105131_token.txt", "w", stdout);
 
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
@@ -2614,7 +2614,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    string log_filename = string("My") + argv[1];
+    string log_filename = "2105131_log.txt";
     logfile = fopen(log_filename.c_str(), "w");
     if (!logfile) {
         perror("Failed to open log file");

@@ -11,17 +11,55 @@ Line no 1: Token <RPAREN> Lexeme ) found
 
 Line no 1: Token <LCURL> Lexeme { found
 
-Line no 2: Token <CONST_CHAR> Lexeme 'p' found --> <CONST_CHAR, p>
+Line no 2: Token <CONST_FLOAT> Lexeme 123.24E34 found
 
 ScopeTable # 1.1
-4 --> < 'p' : CONST_CHAR >
+0 --> < 123.24E34 : CONST_FLOAT >
 ScopeTable # 1
 6 --> < main : ID >
 
-Line no 3: Token <RCURL> Lexeme } found
+Error at line no 3: Too many decimal points 12.34.5.6E8
+
+
+Error at line no 4: Too many decimal points 123.4.5.6E.8
+
+
+Error at line no 5: Too many decimal points 123.4.5.6.6E.8
+
+
+Error at line no 6: Ill formed number 123.24E5.34
+
+
+Line no 7: Token <CONST_FLOAT> Lexeme 123.24 found
+
+ScopeTable # 1.1
+0 --> < 123.24E34 : CONST_FLOAT >
+2 --> < 123.24 : CONST_FLOAT >
+ScopeTable # 1
+6 --> < main : ID >
+
+Line no 7: Token <ID> Lexeme E found
+
+ScopeTable # 1.1
+0 --> < 123.24E34 : CONST_FLOAT >
+2 --> < 123.24 : CONST_FLOAT >
+6 --> < E : ID >
+ScopeTable # 1
+6 --> < main : ID >
+
+Line no 7: Token <CONST_FLOAT> Lexeme .34 found
+
+ScopeTable # 1.1
+0 --> < 123.24E34 : CONST_FLOAT >< .34 : CONST_FLOAT >
+2 --> < 123.24 : CONST_FLOAT >
+6 --> < E : ID >
+ScopeTable # 1
+6 --> < main : ID >
+
+Line no 8: Token <RCURL> Lexeme } found
 
 ScopeTable # 1
 6 --> < main : ID >
 
-Total lines: 3
-Total errors: 0
+Total lines: 8
+Total errors: 4
