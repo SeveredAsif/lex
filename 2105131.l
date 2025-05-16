@@ -30,23 +30,23 @@ DIGIT [0-9]
 
 #lexicalErrors
 {DIGIT}*\.{DIGIT}*\..* {
-    fprintf(logfile, "Error at line no: %d: Too many decimal points: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Too many decimal points %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 
 {DIGIT}+[A-Za-z_]+ {
-    fprintf(logfile, "Error at line no: %d: Invalid prefix on ID or invalid suffix on Number: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Invalid prefix on ID or invalid suffix on Number %s\n\n", yylineno, yytext);
     error_count++;
 }
 
 '(([ -~]{-}['\\])([ -~]{-}['\\])+)' {
     cout<<yytext<<" error char"<<endl;
-    fprintf(logfile, "Error at line no: %d: Multi-character constant error: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Multi character constant error %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 
 <String><<EOF>> {
-    fprintf(logfile, "Error at line no: %d: Unterminated string: %s\n\n", yylineno, lexemecurr.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated string: %s\n\n", yylineno, lexemecurr.c_str());
     curr="";
     error_count++;
     if (logfile) {
@@ -58,7 +58,7 @@ DIGIT [0-9]
 }
 
 <MComment><<EOF>> {
-    fprintf(logfile, "Error at line no: %d: Unterminated comment: %s\n\n", startError, currComment.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated comment %s\n\n", startError, currComment.c_str());
     startError = -1;
     error_count++;
     currComment="";
@@ -71,16 +71,16 @@ DIGIT [0-9]
 }
 
 '' {
-    fprintf(logfile, "Error at line no: %d: Empty character constant error: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Empty character constant error %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 
 [#@$] {
-    fprintf(logfile, "Error at line no: %d: Unrecognized character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unrecognized character %s\n\n", yylineno, yytext);
     error_count++;
 }
 '\\' {
-    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 
@@ -179,7 +179,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 }
 
 [0-9]*\.?[0-9]+(E[+-]?{DIGIT}+.*\..*) {
-    fprintf(logfile, "Error at Line no: %d: Ill-formed number: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Ill formed number %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 
@@ -248,11 +248,11 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 
                                 }
 "'"[^']{2} {
-    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 "'" {
-    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 
@@ -339,7 +339,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 
 <String>\n {
     if (startError==-1) startError=yylineno;
-    fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", startError, lexemecurr.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated string %s\n\n", startError, lexemecurr.c_str());
     startError = -1;
     error_count++;
     yylineno++;
@@ -350,7 +350,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 
 <String>\" {
     if(flag==1){
-    fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", startError, lexemecurr.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated string %s\n\n", startError, lexemecurr.c_str());
     startError = -1;
     error_count++;
     yylineno++;

@@ -964,7 +964,7 @@ case 4:
 YY_RULE_SETUP
 #line 32 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Too many decimal points: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Too many decimal points %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -972,7 +972,7 @@ case 5:
 YY_RULE_SETUP
 #line 37 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Invalid prefix on ID or invalid suffix on Number: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Invalid prefix on ID or invalid suffix on Number %s\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -981,14 +981,14 @@ YY_RULE_SETUP
 #line 42 "2105131.l"
 {
     cout<<yytext<<" error char"<<endl;
-    fprintf(logfile, "Error at line no: %d: Multi-character constant error: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Multi character constant error %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
 case YY_STATE_EOF(String):
 #line 48 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Unterminated string: %s\n\n", yylineno, lexemecurr.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated string: %s\n\n", yylineno, lexemecurr.c_str());
     curr="";
     error_count++;
     if (logfile) {
@@ -1002,7 +1002,7 @@ case YY_STATE_EOF(String):
 case YY_STATE_EOF(MComment):
 #line 60 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Unterminated comment: %s\n\n", startError, currComment.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated comment %s\n\n", startError, currComment.c_str());
     startError = -1;
     error_count++;
     currComment="";
@@ -1018,7 +1018,7 @@ case 7:
 YY_RULE_SETUP
 #line 73 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Empty character constant error: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Empty character constant error %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -1026,7 +1026,7 @@ case 8:
 YY_RULE_SETUP
 #line 78 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Unrecognized character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unrecognized character %s\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -1034,7 +1034,7 @@ case 9:
 YY_RULE_SETUP
 #line 82 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -1280,7 +1280,7 @@ case 47:
 YY_RULE_SETUP
 #line 181 "2105131.l"
 {
-    fprintf(logfile, "Error at Line no: %d: Ill-formed number: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Ill formed number %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -1367,7 +1367,7 @@ case 52:
 YY_RULE_SETUP
 #line 250 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -1375,7 +1375,7 @@ case 53:
 YY_RULE_SETUP
 #line 254 "2105131.l"
 {
-    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    fprintf(logfile, "Error at line no %d: Unterminated character %s\n\n\n", yylineno, yytext);
     error_count++;
 }
 	YY_BREAK
@@ -1542,7 +1542,7 @@ YY_RULE_SETUP
 #line 340 "2105131.l"
 {
     if (startError==-1) startError=yylineno;
-    fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", startError, lexemecurr.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated string %s\n\n", startError, lexemecurr.c_str());
     startError = -1;
     error_count++;
     yylineno++;
@@ -1555,7 +1555,7 @@ YY_RULE_SETUP
 #line 351 "2105131.l"
 {
     if(flag==1){
-    fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", startError, lexemecurr.c_str());
+    fprintf(logfile, "Error at line no %d: Unterminated string %s\n\n", startError, lexemecurr.c_str());
     startError = -1;
     error_count++;
     yylineno++;
