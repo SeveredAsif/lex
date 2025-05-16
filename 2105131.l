@@ -11,6 +11,9 @@
     string curr = "";
     FILE* logfile = nullptr;
     int error_count = 0;
+    int flag = 0;
+    string currComment="";
+    int startError = -1;
 %}
 
 DIGIT [0-9]
@@ -44,20 +47,32 @@ DIGIT [0-9]
 
 <String><<EOF>> {
     fprintf(logfile, "Error at line no: %d: Unterminated string: %s\n\n", yylineno, lexemecurr.c_str());
+    curr="";
     error_count++;
+    if (logfile) {
+        fprintf(logfile, "%s", st->printAllScope().c_str());
+        fprintf(logfile, "\nTotal lines: %d\n", yylineno);
+        fprintf(logfile, "Total errors: %d\n", error_count);
+    }
     exit(1);
 }
 
 <MComment><<EOF>> {
-    fprintf(logfile, "Error at line no: %d: Unterminated comment: %s\n\n", yylineno, curr.c_str());
+    fprintf(logfile, "Error at line no: %d: Unterminated comment: %s\n\n", startError, currComment.c_str());
+    startError = -1;
     error_count++;
+    currComment="";
+    if (logfile) {
+        fprintf(logfile, "%s", st->printAllScope().c_str());
+        fprintf(logfile, "\nTotal lines: %d\n", yylineno);
+        fprintf(logfile, "Total errors: %d\n", error_count);
+    }
     exit(1);
 }
 
 '' {
     fprintf(logfile, "Error at line no: %d: Empty character constant error: %s\n\n", yylineno, yytext);
     error_count++;
-    exit(1);
 }
 
 [#@$] {
@@ -74,30 +89,36 @@ DIGIT [0-9]
 [ \t\r\f\v]+               { /* skip */ }
 
 #Comments
-<INITIAL>\/\/              { BEGIN(SComment); curr+=yytext;}
+<INITIAL>\/\/              { BEGIN(SComment); curr+=yytext;currComment+=yytext;}
 <SComment>\\\n             { yylineno++; curr+=yytext;}
 <SComment>\n                {   BEGIN(INITIAL);  
                                 cout << " Line Count: " << yylineno << endl; 
                                 //curr+='\n';
                                 fprintf(logfile, "Line no %d: Token <COMMENT> Lexeme %s found\n\n", yylineno,curr.c_str());
                                 curr="";
+                                currComment="";
                                 yylineno++;
                             }
 <SComment>.                  { curr+=yytext; }
 
 #MultilineComment
-<INITIAL>"/*"             { BEGIN(MComment); curr+=yytext;}
+<INITIAL>"/*"             { BEGIN(MComment); curr+=yytext;currComment+=yytext;
+                            if(startError==-1) startError=yylineno;
+}
 <MComment>"*/"             { BEGIN(INITIAL); 
                              curr+=yytext;
+                             startError=-1;
                              fprintf(logfile, "Line no %d: Token <COMMENT> Lexeme %s found\n\n", yylineno,curr.c_str());
                              curr="";
+                             currComment="";
                             }
 <MComment>\n {
     yylineno++;
     cout << " Line Count: " << yylineno << endl;
     curr += '\n'; 
+    currComment += '\n';
 }
-<MComment>.                 { curr+=yytext;}
+<MComment>.                 { curr+=yytext;currComment+=yytext;}
 
 #Keywords
 if                { printf("<IF>");    fprintf(logfile, "Line no %d: Token <IF> Lexeme if found\n\n", yylineno); }
@@ -230,6 +251,10 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
     fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
     error_count++;
 }
+"'" {
+    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    error_count++;
+}
 
 
 
@@ -270,34 +295,77 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
     }
 }
 
-#String
-<INITIAL>\"      { BEGIN(String);curr = "<STRING, "; lexemecurr ="\"" ; }
-<String>\\\n      { lexemecurr+="\\";lexemecurr += '\n'; curr+=""; yylineno++;}
-<String>\\n       { curr += "\n"; yylineno++;lexemecurr += "\n";}
-<String>\n        { fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", yylineno, yytext); error_count++; BEGIN(INITIAL); }
-<String>\"         {lexemecurr+=yytext;curr+="\"";}
-<String>.         { if(strcmp(yytext, "\\") != 0){
-                    curr += yytext; 
-                    //cout<<yytext<<endl;
-                    } 
-                    lexemecurr+=yytext;
-                    
-                   }
-<String>[^\\]\"        {
-    //curr += "\"";
-    curr += yytext[0];
 
-    curr += ">"; 
-    lexemecurr += yytext[0];
-    lexemecurr += "\""; 
-    string display_str = curr;
+<INITIAL>\" {
+    BEGIN(String);
+    curr = "<STRING, ";
+    lexemecurr = "\"";
+}
+
+
+<String>[^"\\\n]+ {
+    flag=0;
+    curr += yytext;
+    lexemecurr += yytext;
+}
+
+
+<String>\\\" {
+    flag=0;
+    curr += "\"";
+    lexemecurr += "\\\"";
+}
+
+
+<String>\\\\ {
+    flag=0;
+    curr += "\\";
+    lexemecurr += "\\\\";
+}
+
+<String>\\\n {
+    if(startError==-1){
+        startError = yylineno;
+    }
+    // Escaped newline, continue string — do NOT report error
+    yylineno++; // Important to update line number
+    lexemecurr += "\\\n";
+    flag = 1;
+
+    curr += "";
+}
+
+
+
+<String>\n {
+    if (startError==-1) startError=yylineno;
+    fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", startError, lexemecurr.c_str());
+    startError = -1;
+    error_count++;
+    yylineno++;
+    flag = 0;
     BEGIN(INITIAL);
-    //string lexeme_content = display_str.substr(9, display_str.length()-10);
-    //fprintf(logfile, "Line no %d: Token <STRING> Lexeme \"%s\" found --> <STRING, %s>\n\n", yylineno, curr.c_str(),curr.c_str());
-        fprintf(logfile, "Line no %d: Token <STRING> Lexeme %s found --> %s\n\n", 
-            yylineno, lexemecurr.c_str(), curr.c_str());
+}
+
+
+<String>\" {
+    if(flag==1){
+    fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", startError, lexemecurr.c_str());
+    startError = -1;
+    error_count++;
+    yylineno++;
+    BEGIN(INITIAL);
+    flag = 0;        
+    }
+    else{
+    curr += ">";
+    lexemecurr += "\"";
+    fprintf(logfile, "Line no %d: Token <STRING> Lexeme %s found --> %s\n\n", yylineno, lexemecurr.c_str(), curr.c_str());
+    startError=-1;
     curr = "";
-    lexemecurr="";
+    lexemecurr = "";
+    BEGIN(INITIAL);
+    }
 }
 
 
