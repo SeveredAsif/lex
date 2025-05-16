@@ -10,7 +10,7 @@
 9.2:40-4:18 am - main advanced 
 10. 9:36 am - 9:45 am paused 10:03 am-11:30 am - hash fix + output formatting going on
 11. 11:30 am - 1:20 pm + input1 done 
-12. 2:02 pm - 2:26 - fixing input2 2:44-
+12. 2:02 pm - 2:26 - fixing input2 2:44-5:05 - input 2 done 
 <SComment>\/ {BEGIN (LockComment);}
 <LockComment>\n {BEGIN(SComment);yylineno++;}
 

@@ -1,11 +1,17 @@
-Line no 6: Token <COMMENT> Lexeme /* A sample multi-line
-    comment
+Line no 1: Token <STRING> Lexeme "abcd
+" found --> <STRING, abcd
+>
 
-
-    
-    to check. */ found
+Line no 1: Token <ID> Lexeme efgh found
 
 ScopeTable # 1
+0 --> < efgh : ID >
 
-Total lines: 6
-Total errors: 0
+Error at Line no: 1: Unterminated string: 
+
+
+ScopeTable # 1
+0 --> < efgh : ID >
+
+Total lines: 1
+Total errors: 1

@@ -13,7 +13,7 @@ class SymbolTable
         SymbolTable(int bucketCount=7,unsigned (*hashPointer)(const char *) = SDBMHash){
             // ScopeTable.setScopeId(1);
             currentScope = new ScopeTable(bucketCount,nullptr,hashPointer);
-            cout<<"\tScopeTable# "<<getCurrectScope()->getId()<<" created"<<endl;
+            cout<<"\tScopeTable# "<<getCurrentScope()->getId()<<" created"<<endl;
             this->bucketCount = bucketCount;
         }
         // ~SymbolTable(){
@@ -31,13 +31,13 @@ class SymbolTable
                 currentScope = parent;     
             }
         }
-        ScopeTable* getCurrectScope(){
+        ScopeTable* getCurrentScope(){
             return currentScope;
         }
         void enterScope(){
             ScopeTable *newScope = new ScopeTable(bucketCount,currentScope);
             this->currentScope = newScope;
-            cout<<"\tScopeTable# "<<getCurrectScope()->getId()<<" created"<<endl;
+            cout<<"\tScopeTable# "<<getCurrentScope()->getId()<<" created"<<endl;
         }
 
         void exitScope(){

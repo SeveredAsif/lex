@@ -1,6 +1,2 @@
-    /* A sample multi-line
-    comment
-
-
-    
-    to check. */
+"abcd
+"efgh\"

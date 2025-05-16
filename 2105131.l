@@ -26,13 +26,49 @@ DIGIT [0-9]
 
 
 #lexicalErrors
-{DIGIT}*\.{DIGIT}*\..*       { cout << "Line no: " << yylineno << " Error: this " << yytext << endl; error_count++; }
+{DIGIT}*\.{DIGIT}*\..* {
+    fprintf(logfile, "Error at line no: %d: Too many decimal points: %s\n\n", yylineno, yytext);
+    error_count++;
+}
 
-{DIGIT}+[A-Za-z_]+        { cout << "Line no: " << yylineno << " Error: that" << yytext << endl; error_count++; }
-'[[:alnum:]][[:alnum:]]+'      { cout << "Line no: " << yylineno << " Error: wow" << yytext << endl; error_count++; }
-<String><<EOF>>             { cout << "STRING Line no: " << yylineno << " Error: ajaira" << yytext << endl; error_count++; exit(1); }
-<MComment><<EOF>>            { cout << "Line no: " << yylineno << " Error: chole" << yytext << endl; error_count++; exit(1); }
-''                           { cout << "Line no: " << yylineno << " Error: bored" << yytext << endl; exit(1); }
+{DIGIT}+[A-Za-z_]+ {
+    fprintf(logfile, "Error at line no: %d: Invalid prefix on ID or invalid suffix on Number: %s\n\n", yylineno, yytext);
+    error_count++;
+}
+
+'(([ -~]{-}['\\])([ -~]{-}['\\])+)' {
+    cout<<yytext<<" error char"<<endl;
+    fprintf(logfile, "Error at line no: %d: Multi-character constant error: %s\n\n", yylineno, yytext);
+    error_count++;
+}
+
+<String><<EOF>> {
+    fprintf(logfile, "Error at line no: %d: Unterminated string: %s\n\n", yylineno, lexemecurr.c_str());
+    error_count++;
+    exit(1);
+}
+
+<MComment><<EOF>> {
+    fprintf(logfile, "Error at line no: %d: Unterminated comment: %s\n\n", yylineno, curr.c_str());
+    error_count++;
+    exit(1);
+}
+
+'' {
+    fprintf(logfile, "Error at line no: %d: Empty character constant error: %s\n\n", yylineno, yytext);
+    error_count++;
+    exit(1);
+}
+
+[#@$] {
+    fprintf(logfile, "Error at line no: %d: Unrecognized character: %s\n\n", yylineno, yytext);
+    error_count++;
+}
+'\\' {
+    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    error_count++;
+}
+
 
 #whitespace
 [ \t\r\f\v]+               { /* skip */ }
@@ -87,7 +123,8 @@ static            { printf("<STATIC>");fprintf(logfile, "Line no %d: Token <STAT
 unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UNSIGNED> Lexeme unsigned found\n\n", yylineno); }
 
 #Constants
-{DIGIT}+                      { printf("<CONST_INT,%s>", yytext);   
+{DIGIT}+                      { if(st->getCurrentScope()->getId()>1){
+                                printf("<CONST_INT,%s>", yytext);   
                                 fprintf(logfile, "Line no %d: Token <CONST_INT> Lexeme %s found\n\n", yylineno, yytext); 
                                 stringstream ss;
                                 ss << "<CONST_INT," << yytext << ">";
@@ -99,11 +136,12 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
                                     fprintf(logfile, "< %s : CONST_INT > already exists in %s\n\n", yytext, ans.c_str());
 
                                 }
-                                
-                                
+                                }
                             }
 
 [0-9]*\.?[0-9]+(E[+-]?{DIGIT}+)? { 
+    if(st->getCurrentScope()->getId()>1){
+
     printf("<CONST_FLOAT,%s>", yytext); 
     fprintf(logfile, "Line no %d: Token <CONST_FLOAT> Lexeme %s found\n\n", yylineno, yytext); 
     stringstream ss;
@@ -116,17 +154,19 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
         fprintf(logfile, "< %s : FLOAT > already exists in %s\n\n", yytext, ans.c_str());
 
     }
+    }
 }
 
-[0-9]*\.[0-9]+(E[+-]?{DIGIT}+.*\..*) { 
-    cout << "Line no: " << yylineno << " Error: " << yytext << endl; 
-    error_count++; 
+[0-9]*\.?[0-9]+(E[+-]?{DIGIT}+.*\..*) {
+    fprintf(logfile, "Error at Line no: %d: Ill-formed number: %s\n\n", yylineno, yytext);
+    error_count++;
 }
 
 
 #Characters
 
 '\\([tabfrbv0])'            {   
+                                if(st->getCurrentScope()->getId()>1)
                                 printf("<CONST_CHAR,%c>", yytext[2]); 
                                 char value;
 
@@ -153,7 +193,8 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
                                 }
                                 
                             }
-'([^nt\\abfrbv0])'        {   
+'.'        {   
+                                if(st->getCurrentScope()->getId()>1){
                                 printf("<CONST_CHAR,%c>", yytext[2]); 
                                 fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '%c' found --> <CONST_CHAR, %c>\n\n", yylineno, yytext[1],yytext[1]); 
                                 stringstream ss;
@@ -166,9 +207,11 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
                                     fprintf(logfile, "< %s : CONST_CHAR > already exists in %s\n\n", yytext, ans.c_str());
 
                                 }
+                                }
                                 
                             }
 '\\n'                         { 
+                                if(st->getCurrentScope()->getId()>1){
                                 printf("<CONST_CHAR,%c>", '\n'); fprintf(logfile, "Line no %d: Token <CONST_CHAR> Lexeme '\\n' found --> <CONST_CHAR, %c>\n\n", yylineno,'\n'); 
                                 stringstream ss;
                                 ss << "<CONST_CHAR," << "'\n'" << ">";
@@ -181,8 +224,14 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 
                                 }
                                 }
-"'"[^']{2}                   { cout << "Line no: " << yylineno << " unmatched single quote Error: kire" << yytext << endl; error_count++; }
-'\\'                        { /* lone backslash */ }
+
+                                }
+"'"[^']{2} {
+    fprintf(logfile, "Error at line no: %d: Unterminated character: %s\n\n", yylineno, yytext);
+    error_count++;
+}
+
+
 
 #Operators
 [+-]                          { printf("<ADDOP,%s>", yytext); fprintf(logfile, "Line no %d: Token <ADDOP> Lexeme %s found\n\n", yylineno, yytext); }
@@ -205,6 +254,8 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 
 #Identifiers
 <INITIAL>[a-zA-Z_][a-zA-Z0-9_]* {
+    cout<<yytext<<" valid id"<<endl;
+    //if(st->getCurrentScope()->getId()>1)
     printf("<ID,%s>", yytext);
     fprintf(logfile, "Line no %d: Token <ID> Lexeme %s found\n\n", yylineno, yytext);
     stringstream ss;
@@ -223,7 +274,7 @@ unsigned          { printf("<UNSIGNED>");fprintf(logfile, "Line no %d: Token <UN
 <INITIAL>\"      { BEGIN(String);curr = "<STRING, "; lexemecurr ="\"" ; }
 <String>\\\n      { lexemecurr+="\\";lexemecurr += '\n'; curr+=""; yylineno++;}
 <String>\\n       { curr += "\n"; yylineno++;lexemecurr += "\n";}
-<String>\n        { cout << "string error" << endl; error_count++; BEGIN(INITIAL); }
+<String>\n        { fprintf(logfile, "Error at Line no: %d: Unterminated string: %s\n\n", yylineno, yytext); error_count++; BEGIN(INITIAL); }
 <String>\"         {lexemecurr+=yytext;curr+="\"";}
 <String>.         { if(strcmp(yytext, "\\") != 0){
                     curr += yytext; 
